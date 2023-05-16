@@ -9,6 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	log "github.com/taylormonacelli/chattermouth/cmd/logging"
 )
 
 var cfgFile string
@@ -45,6 +46,9 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.chattermouth.yaml)")
+	rootCmd.PersistentFlags().String("log-level",
+		"info", "Log level (trace, debug, info, warn, error, fatal, panic)",
+	)
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -73,4 +77,8 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
+
+	viper.BindPFlag("log-level", rootCmd.Flags().Lookup("log-level"))
+	logLevel := log.ParseLogLevel(viper.GetString("log-level"))
+	log.Logger.SetLevel(logLevel)
 }
