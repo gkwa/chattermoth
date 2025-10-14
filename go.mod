@@ -2,7 +2,7 @@ module github.com/taylormonacelli/chattermouth
 
 go 1.23.0
 
-toolchain go1.25.2
+toolchain go1.25.3
 
 require (
 	github.com/sirupsen/logrus v1.9.3
